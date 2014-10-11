@@ -9,7 +9,7 @@ Technical
 ---------
 
 Consists of: 
-- a cloud service provided aggregated insight into Migros Products, GS1, USDA and more
+- a cloud service providing aggregated insight into Migros Products, GS1, USDA and more
 - A personalized web-interface with tracking products, diary overview and statistical dashboard
 - A mobile app linked with the user account that simplifies scanning of products and keeping an track over patients diet
 
