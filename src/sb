@@ -1,0 +1,132 @@
+#!/usr/bin/env python
+'''***sb*** is a command-line interface for **SugarBaby**
+
+Copyright (c) 2014 Yauhen Yakimovich
+
+Licensed under the MIT License (MIT). Read a copy of LICENSE distributed with
+this code.
+
+See README and project page at https://github.com/ewiger/sugarbaby
+'''
+import os
+import sys
+import argparse
+import logging
+from functools import partial
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "picostack.settings")
+sys.path.append(os.path.dirname(__file__))
+
+from sugarbaby.migrosugar.models import (ProductInfo)
+from sugarbaby import __version__ as SUGARBABY_VERSION
+
+APP_NAME = 'sb'
+DEBUG = False
+APP_DIR = os.path.dirname(os.path.abspath(__file__))
+logger = logging.getLogger('sugarbaby')
+is_interactive = False
+LINE_WIDTH = 80
+
+
+class SugaBabeError(Exception):
+    '''Custom hierarchy of errors'''
+
+
+class MissingCliArgs(SugaBabeError):
+    '''Error of parsing command-line arguments.'''
+
+
+class SugaBabe(object):
+
+    def __init__(self, options):
+        self.options = options
+        self.logging_server_pid = None
+
+    def init_db(self):
+        '''Initialize django DB'''
+        # Create a var folder for the django database if missing.
+        from sugarbaby.settings import DATABASES
+        db_location = DATABASES['default']['NAME']
+        if not os.path.exists(db_location):
+            # Populate new empty DB with SQL, create an admin.
+            from django.core import management
+            # Allow asking user for input.
+            management.call_command('syncdb', interactive=True, verbosity='1')
+        else:
+            print 'DB path already exists in folder: "%s". Remove it to ' \
+                'reinitialize DB from scratch.' % db_location
+
+    @staticmethod
+    def process_init_cmds(args, subparser):
+        instance = SugaBabe(args)
+        if args.target == 'db':
+            instance.init_db()
+        else:
+            subparser.print_help()
+
+
+class ArgumentParser(argparse.ArgumentParser):
+
+    def error(self, message):
+        self.print_help(sys.stderr)
+        self.exit(2, '%s: error: %s\n' % (self.prog, message))
+
+
+VERBOSITY_LEVELS = {
+    1: logging.WARN,
+    2: logging.INFO,
+    3: logging.DEBUG,
+    4: logging.NOTSET,
+}
+LOGGING_LEVELS = {
+    'WARN': logging.WARN,
+    'INFO': logging.INFO,
+    'DEBUG': logging.DEBUG,
+    'NOTSET': logging.NOTSET,
+}
+VERBOSITY_TO_LEVELS = {
+    1: 'WARN',
+    2: 'INFO',
+    3: 'DEBUG',
+    4: 'NOTSET',
+}
+
+
+if __name__ == '__main__':
+    parser = ArgumentParser(description='CLI for SugarBaby')
+    parser.add_argument('-i', '--interactive', action='store_true',
+                        default=False)
+    parser.add_argument("-v", "--verbosity", action="count", default=1,
+                        help='Increase logging verbosity (-v WARN, -vv INFO, '
+                        '-vvv DEBUG)')
+    parser.add_argument('--version', action='version',
+                        version='%(prog)s ' + SUGARBABY_VERSION)
+
+    subparsers = parser.add_subparsers()
+
+    # initialization routines
+    init_parser = subparsers.add_parser('init')
+    init_parser.add_argument('target', choices=['db'])
+    init_parser.set_defaults(handler=partial(
+        SugaBabe.process_init_cmds, subparser=init_parser))
+
+    # Parse arguments.
+    args = parser.parse_args()
+    # On error this will print help and cause exit with explanation message.
+    is_interactive = args.interactive
+
+    # Configure logging.
+    logging.basicConfig(
+        level=VERBOSITY_LEVELS[args.verbosity],
+        format='%(asctime)s %(name)-20s %(levelname)-8s %(message)s',
+        datefmt='%m-%d %H:%M')
+
+    try:
+        if args.handler:
+            args.handler(args)
+        else:
+            parser.print_help()
+    except SugaBabeError as sugababe_error:
+        print 'Failed.'
+        if type(sugababe_error) is MissingCliArgs:
+            print 'Missing one of the required command-line arguments.'
+        print 'Error message: "%s"' % str(sugababe_error)
