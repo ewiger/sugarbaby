@@ -1,0 +1,40 @@
+{% extends "layout.html" %}
+
+{% block title %}Count sugars{% endblock %}
+
+{% load bootstrap3 %}
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+
+  	<div class="col-md-1"></div>
+
+  	<div class="col-md-8" id="count_product">
+  		<h4>scan or add product</h4>
+  		<div class="product-input-container">  
+            <input id="product-input-fbtheme" type="text" name="product-input" style="display: none;">
+        </div>
+
+  	</div>
+  	
+
+	<div class="col-md-1"></div>
+
+	</div>
+</div>
+
+{% endblock %}
+
+
+{% block bottomjs %}
+<script type="text/javascript"> <!--
+	jQuery( document ).ready(function( $ ) {
+		// BootstrapDialog.show({
+  		//		message: $('#aboutModal .modal-body').html()
+  		// });
+		$("#product-input-fbtheme").tokenInput("/list_products");
+	 
+	});	
+--></script>
+
+{% endblock %}

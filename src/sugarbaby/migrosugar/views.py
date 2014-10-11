@@ -1,4 +1,6 @@
+from django.http import HttpResponse
 from django.shortcuts import render
+import json
 
 
 def get_view_context():
@@ -17,4 +19,12 @@ def get_view_context():
 
 # Entry page
 def home(request):
-    return render(request, 'dashboard/view.html', get_view_context())
+    return render(request, 'dashboard/count.html', get_view_context())
+
+
+def list_products(request):
+    response_data = [
+        {'id': '7610200243430', 'name': 'M-Budget Vollmilch'},
+    ]
+    return HttpResponse(json.dumps(response_data),
+                        content_type="application/json")
