@@ -1,0 +1,3 @@
+[submodule "git/MScraper"]
+	path = git/MScraper
+	url = https://github.com/fliiiix/MScraper

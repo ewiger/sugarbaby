@@ -36,6 +36,8 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'bootstrap3',
+    'sugarbaby.migrosugar',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -78,5 +80,26 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.6/howto/static-files/
-
 STATIC_URL = '/static/'
+
+
+SETTINGS_PATH = os.path.normpath(os.path.dirname(__file__))
+# Find templates in the same folder as settings.py.
+TEMPLATE_DIRS = (
+    os.path.join(SETTINGS_PATH, 'templates'),
+)
+STATICFILES_DIRS = (
+    os.path.join(SETTINGS_PATH, 'static'),
+)
+
+
+BOOTSTRAP3 = {
+    'jquery_url': STATIC_URL + 'bower_components/jquery/dist/jquery.min.js',
+    'base_url': STATIC_URL + 'bower_components/bootstrap/dist/',
+    'css_url': None,
+    'theme_url': STATIC_URL + 'bower_components/bootstrap/dist/css/bootstrap-'
+        + 'theme.min.css',
+    'javascript_url': None,
+    'horizontal_label_class': 'col-md-2',
+    'horizontal_field_class': 'col-md-4',
+}
