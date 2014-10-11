@@ -6,21 +6,26 @@
 {% block content %}
 <div class="container-fluid">
     <div class="row">
-
   	<div class="col-md-1"></div>
-
   	<div class="col-md-8" id="count_product">
   		<h4>scan or add product</h4>
   		<div class="product-input-container">  
             <input id="product-input-fbtheme" type="text" name="product-input" style="display: none;">
         </div>
-
   	</div>
-  	
+  	<div class="col-md-1"></div>
+  	</div>
 
-	<div class="col-md-1"></div>
+  	<div class="row">&nbsp;</div>
 
-	</div>
+	<div class="row">
+  	<div class="col-md-1"></div>
+  	<div class="col-md-8" id="buttons">
+  		<button id="buttonTrack" name="buttonTrack" type="submit" class="btn btn-warning" value="track">Track</button>
+  		<button id="buttonClear" name="buttonClear" type="submit" class="btn" value="clear">Clear</button>
+  	</div>
+  	</div>
+
 </div>
 
 {% endblock %}
@@ -33,7 +38,9 @@
   		//		message: $('#aboutModal .modal-body').html()
   		// });
 		$("#product-input-fbtheme").tokenInput("/list_products");
-	 
+		$("#buttonClear").on('click', function (e) {
+			$("#product-input-fbtheme").tokenInput("clear");
+		});	 
 	});	
 --></script>
 
