@@ -8,11 +8,37 @@ class ProductInfo(models.Model):
     # Global Trade Item Number
     gtin = models.CharField(max_length=60)
 
-    # Used to check if we have enough free space when cloning (in MB).
-    disk_size = models.PositiveIntegerField()
+    image_url = models.CharField(max_length=128)
+
+    # disk_size = models.PositiveIntegerField()
+
+    # Nutrient facts
+    # kcal
+    energy = models.FloatField()
+
+    # g
+    proteins = models.FloatField()
+
+    # g
+    carbohydrates = models.FloatField()
+
+    # g
+    fats = models.FloatField()
+
+    base_quantity = models.FloatField()
+
+    base_unit = models.CharField(max_length=6)
 
     def __repr__(self):
         return 'Product (#%s): <%s>' % (self.gtin, self.name)
 
     def __str__(self):
         return self.name
+
+
+class DiaryRecord(models.Model):
+
+    # Timestamp
+    consumed = models.DateTimeField(auto_now_add=True)
+
+    product = models.ForeignKey(ProductInfo, related_name='diary_entries')

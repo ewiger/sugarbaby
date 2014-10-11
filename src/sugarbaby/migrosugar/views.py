@@ -21,6 +21,13 @@ def get_view_context():
 def home(request):
     return render(request, 'dashboard/count.html', get_view_context())
 
+def count(request):
+    return render(request, 'dashboard/count.html', get_view_context())
+
+
+def diary(request):
+    return render(request, 'dashboard/diary.html', get_view_context())
+
 
 def list_products(request):
     response_data = [
