@@ -6,10 +6,12 @@ admin.autodiscover()
 
 urlpatterns = patterns(
     '',
+    url(r'^$', RedirectView.as_view(url='count/', permanent=False)),
     url(r'^count/', 'sugarbaby.migrosugar.views.home', name='home'),
     url(r'^list_products/', 'sugarbaby.migrosugar.views.list_products',
         name='list_products'),
+    url(r'^get_sugar_values/(?P<selected_date>\w{0,50})',
+        'sugarbaby.migrosugar.views.get_sugar_values'),
     url(r'^diary/', 'sugarbaby.migrosugar.views.diary', name='diary'),
     url(r'^admin/', include(admin.site.urls)),
-    url(r'^$', RedirectView.as_view(url='count/', permanent=False)),
 )

@@ -5,16 +5,43 @@
 {% load bootstrap3 %}
 {% block content %}
 <div class="container-fluid">
-    <div class="row">
 
+	<div class="row">
   	<div class="col-md-1"></div>
-
-  	<div class="col-md-10" id="instances_list">
-  	<!---% include "instances/list.html" %}-->
-
-	<div class="col-md-1"></div>
-
+  	<div class='col-sm-6'>
+  			<h4>pick a date and check your sugar values</h4>  		
+			<div class="form-group">
+				<div class='input-group date' id='datetimepicker'>
+					<input type='text' class="form-control" data-date-format="YYYY/MM/DD"/>
+					<span class="input-group-addon">
+						<span class="glyphicon glyphicon-calendar"></span>
+					</span>
+				</div>
+			</div>
+		</div>
 	</div>
+	<div class="col-md-1"></div>
+	</div>
+   
+	<div class="row">
+	  	<div class="col-md-1"></div>
+	  	<div class="col-md-8">&nbsp;</div>
+	  	<div class="col-md-1"></div>
+  	</div>
+
+
+  	<style type="text/css">
+    	.bs-example{
+	    	margin: 20px;
+    	}
+	</style>
+
+	<div class="row">
+  		<div class="col-md-1"></div>
+  		<div class="col-md-8" id="sugarvalues"></div>
+  		<div class="col-md-1"></div>
+  	</div>
+
 </div>
 
 {% endblock %}
@@ -23,58 +50,53 @@
 {% block bottomjs %}
 <script type="text/javascript"> <!--
 	jQuery( document ).ready(function( $ ) {
-		BootstrapDialog.show({
-            message: $('#aboutModal .modal-body').html()
-        });
+    	// $('.datepicker').datepicker();
+		$('#datetimepicker').datetimepicker({
+			pickTime: false,
+			language: 'en',
+			defaultDate: '2014 10.12',
+		});		
 
-		// TODO: Try this?
-	   	//$('#instancesform tbody tr').formset();
-	  //  	window.picostackRefreshWorkerFn = function () {
-	  //  		// Loop through each popover on the page
-			// $("[data-toggle=popover]").each(function() {
-			//     // Hide this popover if it's visible and if the user clicked outside of it
-			//     // if ($(this).next('div.popover:visible').length && $(".popover").has(e.target).length === 0) {
-			//     $(this).popover("hide");
-			//     // }
-		 //  	});		
-  	// 		// Do ajax request.
-			// $.ajax({
-			// 	url: "/list_instances",
-			// 	success: function( data ) {
-		 //    		// if ( console && console.log ) {
-			//         // 	    console.log( "data:", data);
-		 //    		// }
-		 //    		$('#instances_list').hide().html(data).fadeIn();
-	  // 			},
-	  // 			complete: function() {
-	  // 				// TODO: update html with data only if string hash is different.
-	  // 				// For connection instructions.
-	  // 				$("[data-toggle='popover']").popover({
- 		// 			   container: 'body'
-			// 		});
-	  // 				// Add click handler to the refresh button.
-		 //  			$('#refreshInstancesButton').on('click', function (e) {
-			//   			clearTimeout(window.picostackRefreshWorkerTimer);
-			//   			picostackRefreshWorkerFn();  			
-			// 		});
-		 //     		// Schedule the next request when the current one's complete.
-	  //   	  		window.picostackRefreshWorkerTimer = setTimeout(window.picostackRefreshWorkerFn, 5000);
-		 //    	}
-		 //    });
-	  //   };
-	  //   picostackRefreshWorkerFn();
-	  //   $('#instances_list').hover(
-	  //   	function () {
-	  //   		// Block refresh if user has his mouse on top of the form.
-	  //   		clearTimeout(window.picostackRefreshWorkerTimer);
-	  //  		},
-	  //   	function () {
-	  //   		// Continue refreshing when user leaves the form.
-			// 	window.picostackRefreshWorkerTimer = setTimeout(window.picostackRefreshWorkerFn, 5000);
-	  //  		}
-	  //   );
-	 
+		var getSugarValuesFn = function() {
+
+  			// Do ajax request.
+			$.ajax({
+				url: "/get_sugar_values/" + $('#datetimepicker').data("DateTimePicker").getDate().format("YYYYMMDD"),
+				success: function( data ) {
+		    		if ( console && console.log ) {
+		        	    //console.log( "data:", data);
+		    		}		    		
+		    		var tHtml = '<table class="table table-hover">';
+        			tHtml += '<thead><tr>';
+        			tHtml += '<th>Time</th><th>Name</th><th>Energy</th><th>Proteins</th><th>Carbohydrates (sugars)</th><th>Fats</th></tr>';
+        			tHtml += '</thead><tbody>';
+        			for (var i = 0; i < data.length; i++) {
+        				var row = data[i];
+        				//console.log(row);
+        				tHtml += '<tr>';
+        				tHtml += '<td>' + row['consumed'] + '</td>';
+        				tHtml += '<td>' + row['name'] + '</td>';
+        				tHtml += '<td>' + row['energy'] + '</td>';
+        				tHtml += '<td>' + row['proteins'] + '</td>';
+        				tHtml += '<td>' + row['carbohydrates'] + '</td>';
+        				tHtml += '<td>' + row['fats'] + '</td>';
+        				tHtml += '</tr>';
+        			}
+					tHtml += '</tbody></table>';
+        			//console.log(tHtml);
+        			$('#sugarvalues').hide().html(tHtml).fadeIn();
+	  			}	
+		    });
+
+		};
+		getSugarValuesFn();
+
+
+
 	});	
+
+
+			
 --></script>
 
 {% endblock %}
