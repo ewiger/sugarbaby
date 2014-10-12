@@ -1,10 +1,10 @@
 {% extends "layout.html" %}
-
+{% load staticfiles %}
 {% block title %}Count sugars{% endblock %}
 
 {% load bootstrap3 %}
 {% block content %}
-<div class="container-fluid">
+  <div class="container-fluid">
     <div class="row">
   	<div class="col-md-1"></div>
   	<div class="col-md-8" id="count_product">
@@ -14,9 +14,25 @@
         </div>
   	</div>
   	<div class="col-md-1"></div>
-  	</div>
+  </div>
 
-  	<div class="row">&nbsp;</div>
+	<div class="row">&nbsp;</div>
+
+
+  <div class="container-fluid">
+    <div class="row">
+    <div class="col-md-1"></div>
+    <div class="col-md-8" id="count_product">
+        <img src="/static/BarcodeReader/sample/sample-milch2.jpg" width="320" height="240" id="Image" style="left:0;top:0;border:2px groove silver" />
+        <!-- <p id="Result"></p> -->
+        <!-- <button style="position:absolute;top:260px;left:282px;padding:0;" type="button" width="30" id="NextImage">Next&ensp;&gt;&gt;</button>
+        <button style="position:absolute;top:260px;left:104px;padding:0;" type="button" width="30" id="PreviousImage">&lt;&lt;&ensp;Previous</button> -->
+        <!-- <button style="left:192px;" type="button" width="30" id="Decode" class="btn btn-danger">Decode</button> -->
+        </div>
+    <div class="col-md-1"></div>
+  </div>
+
+  <div class="row">&nbsp;</div>
 
 	<div class="row">
   	<div class="col-md-1"></div>
@@ -32,11 +48,12 @@
 
 
 {% block bottomjs %}
+<!-- <script type="text/javascript" src="{% static "barcoder.js" %}"></script> -->
 <script type="text/javascript"> <!--
 	jQuery( document ).ready(function( $ ) {
-		// BootstrapDialog.show({
-  		//		message: $('#aboutModal .modal-body').html()
-  		// });
+		BootstrapDialog.show({
+  		message: $('#aboutModal .modal-body').html()
+  	});
 		$("#product-input-fbtheme").tokenInput("/list_products", {
       preventDuplicates: true,
       onEnterKey: function() {
@@ -52,7 +69,11 @@
       var prodIds = [];
       $(tokens).each(function(ind,el){
           prodIds.push(el.id);
-      });
+      });      
+      if (prodIds.length <= 0) {
+        prodIds = ['7617012070261'];        
+        $("#product-input-fbtheme").tokenInput("add", {id: '7617012070261', name: '7617012070261'});
+      }
       // console.log(prodIds);
       $.ajax({
         url: "/track_product/" + prodIds.join(),

@@ -59,8 +59,8 @@ def diary(request):
 
 def list_products(request):
     response_data = [
-        {'id': '7610200243430', 'name': 'M-Budget Vollmilch'},
-        {'id': '7610200243430', 'name': '7610200243430'},
+        {'id': '7617012070261', 'name': 'Zuribieter Vollmilch'},
+        {'id': '7617012070261', 'name': '7617012070261'},
     ]
     return HttpResponse(json.dumps(response_data),
                         content_type="application/json")
