@@ -13,3 +13,16 @@ Consists of:
 - A personalized web-interface with tracking products, diary overview and statistical dashboard
 - A mobile app linked with the user account that simplifies scanning of products and keeping an track over patients diet
 
+
+Screenshots
+-----------
+
+
+Tracking product
+
+![tracking](https://github.com/ewiger/sugarbaby/raw/master/doc/screen1.png)
+
+
+Checking sugar levels
+
+![sugar](https://github.com/ewiger/sugarbaby/raw/master/doc/screen2.png)
