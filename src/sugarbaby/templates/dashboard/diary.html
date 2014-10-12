@@ -70,19 +70,23 @@
         			tHtml += '<thead><tr>';
         			tHtml += '<th>Time</th><th>Name</th><th>Energy</th><th>Proteins</th><th>Carbohydrates (sugars)</th><th>Fats</th></tr>';
         			tHtml += '</thead><tbody>';
-        			for (var i = 0; i < data.length; i++) {
-        				var row = data[i];
-        				//console.log(row);
-        				tHtml += '<tr>';
-        				tHtml += '<td>' + row['consumed'] + '</td>';
-        				tHtml += '<td>' + row['name'] + '</td>';
-        				tHtml += '<td>' + row['energy'] + '</td>';
-        				tHtml += '<td>' + row['proteins'] + '</td>';
-        				tHtml += '<td>' + row['carbohydrates'] + '</td>';
-        				tHtml += '<td>' + row['fats'] + '</td>';
-        				tHtml += '</tr>';
-        			}
-					tHtml += '</tbody></table>';
+        			if (data.length > 0) {
+	        			for (var i = 0; i < data.length; i++) {
+	        				var row = data[i];
+	        				//console.log(row);
+	        				tHtml += '<tr>';
+	        				tHtml += '<td>' + row['consumed'] + '</td>';
+	        				tHtml += '<td>' + row['name'] + '</td>';
+	        				tHtml += '<td>' + row['energy'] + '</td>';
+	        				tHtml += '<td>' + row['proteins'] + '</td>';
+	        				tHtml += '<td>' + row['carbohydrates'] + '</td>';
+	        				tHtml += '<td>' + row['fats'] + '</td>';
+	        				tHtml += '</tr>';
+	        			}
+						tHtml += '</tbody></table>';
+					} else {
+						tHtml = '<p>No records on this day.</p>'
+					}
         			//console.log(tHtml);
         			$('#sugarvalues').hide().html(tHtml).fadeIn();
 	  			}	
@@ -90,8 +94,9 @@
 
 		};
 		getSugarValuesFn();
-
-
+		$("#datetimepicker").on("dp.change",function (e) {
+               getSugarValuesFn();
+        });
 
 	});	
 
