@@ -1,3 +1,6 @@
 [submodule "git/MScraper"]
 	path = git/MScraper
 	url = https://github.com/fliiiix/MScraper
+[submodule "git/BarcodeReader"]
+	path = git/BarcodeReader
+	url = git@github.com:EddieLa/BarcodeReader.git
