@@ -3,8 +3,8 @@ from django.shortcuts import render
 from django import forms
 import json
 from functools import partial
-from sugarbaby.migrosugar.models import DiaryRecord
-
+from sugarbaby.migrosugar.models import DiaryRecord, ProductInfo
+from sugarbaby.error import DataModelError
 
 DateInput = partial(forms.DateInput, {'class': 'datepicker'})
 
@@ -68,5 +68,21 @@ def list_products(request):
 
 def get_sugar_values(request, selected_date):
     response_data = DiaryRecord.get_daily_values(selected_date)
+    return HttpResponse(json.dumps(response_data),
+                        content_type="application/json")
+
+
+def track_product(request, product):
+    response_data = {'result': 'ok'}
+    if ',' in product:
+        products = ','.split(product)
+    else:
+        products = [product]
+    for product_gtin in products:
+        product = ProductInfo.objects.get(gtin=product_gtin)
+        if not product:
+            raise DataModelError('Product info not found: %s' % product_gtin)
+        record = DiaryRecord.objects.create(product=product)
+        response_data['record_id'] = record.id
     return HttpResponse(json.dumps(response_data),
                         content_type="application/json")

@@ -18,6 +18,7 @@ sys.path.append(os.path.dirname(__file__))
 
 from sugarbaby.migrosugar.models import (ProductInfo)
 from sugarbaby import __version__ as SUGARBABY_VERSION
+from sugarbaby.error import SugaBabeError, MissingCliArgs
 
 APP_NAME = 'sb'
 DEBUG = False
@@ -25,14 +26,6 @@ APP_DIR = os.path.dirname(os.path.abspath(__file__))
 logger = logging.getLogger('sugarbaby')
 is_interactive = False
 LINE_WIDTH = 80
-
-
-class SugaBabeError(Exception):
-    '''Custom hierarchy of errors'''
-
-
-class MissingCliArgs(SugaBabeError):
-    '''Error of parsing command-line arguments.'''
 
 
 class SugaBabe(object):

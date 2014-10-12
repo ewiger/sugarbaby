@@ -37,10 +37,31 @@
 		// BootstrapDialog.show({
   		//		message: $('#aboutModal .modal-body').html()
   		// });
-		$("#product-input-fbtheme").tokenInput("/list_products");
+		$("#product-input-fbtheme").tokenInput("/list_products", {
+      preventDuplicates: true,
+      onEnterKey: function() {
+        $('#buttonTrack').trigger('click');
+      }
+    });
 		$("#buttonClear").on('click', function (e) {
 			$("#product-input-fbtheme").tokenInput("clear");
-		});	 
+		});
+
+    $("#buttonTrack").on('click', function (e) {
+      var tokens = $("#product-input-fbtheme").tokenInput('get');
+      var prodIds = [];
+      $(tokens).each(function(ind,el){
+          prodIds.push(el.id);
+      });
+      // console.log(prodIds);
+      $.ajax({
+        url: "/track_product/" + prodIds.join(),
+        success: function( data ) {
+            
+        }
+      });       
+    });
+
 	});	
 --></script>
 
